@@ -19,14 +19,14 @@
 
 ```env
 # 数据库配置
-DB_HOST=152.136.49.209
+DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_USERNAME=member_sys
-DB_PASSWORD=member_sys@@
+DB_USERNAME=root
+DB_PASSWORD=your_password_here
 DB_DATABASE=barber_crm
 
 # JWT 配置
-JWT_SECRET=your-secret-key-here
+JWT_SECRET=your_jwt_secret_key_here
 JWT_EXPIRES_IN=24h
 ```
 

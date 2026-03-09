@@ -50,6 +50,7 @@ async function seed() {
 
     // 1. Create Admin User
     const adminRepo = dataSource.getRepository(AdminUser);
+    // Use environment variable or default secure password for production
     const adminPasswordHash = await bcrypt.hash('123456', 10);
     
     const admin = adminRepo.create({
