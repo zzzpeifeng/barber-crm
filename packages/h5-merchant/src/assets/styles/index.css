@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* SHOPLINE POS 2.0 Style Variables - Light Theme */
+  --van-primary-color: #2563eb; /* Tailwind blue-600 */
+  --van-nav-bar-background: #ffffff;
+  --van-nav-bar-title-text-color: #1f2937; /* gray-800 */
+  --van-nav-bar-icon-color: #2563eb;
+  --van-tabbar-background: #ffffff;
+  --van-tabbar-item-text-color: #64748b; /* slate-500 */
+  --van-tabbar-item-active-color: #2563eb;
+  --van-tabbar-item-active-background: transparent;
+  --van-card-background: #ffffff;
+  --van-card-text-color: #334155; /* slate-700 */
+  --van-cell-background: #ffffff;
+  --van-cell-text-color: #334155;
+  --van-cell-group-background: transparent;
+  --van-background-2: #f8fafc; /* slate-50 */
+}
+
+/* Force override for Navbar title to ensure visibility against white background */
+.van-nav-bar__title {
+  color: #1f2937 !important;
+  font-weight: 600;
+}
+
+.van-nav-bar .van-icon {
+  color: #2563eb !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f1f5f9; /* slate-100 */
+  color: #1f2937; /* gray-800 */
+  min-height: 100vh;
+}
+
+/* Remove the dark mode gradient animation */
+body::before {
+  display: none;
+}
+
+.page-container {
+  min-height: 100vh;
+  background-color: #f1f5f9;
+  position: relative;
+  z-index: 1;
+}
+
+.card-container {
+  margin: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm;
+}
+
+.btn-secondary {
+  @apply bg-white text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors border border-slate-300 shadow-sm;
+}
+
+.form-input {
+  @apply w-full px-3 py-2 border border-slate-300 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+}
+
+.page-title {
+  @apply text-xl font-bold text-slate-900 mb-4;
+}
+
+.section-title {
+  @apply text-lg font-semibold text-slate-800 mb-3;
+}
+
+.info-text {
+  @apply text-slate-500 text-sm;
+}
