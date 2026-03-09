@@ -1,0 +1,40 @@
+
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
+      - NODE_ENV=production
+
+  h5-merchant:
+    build:
+      context: .
+      dockerfile: packages/h5-merchant/Dockerfile
+    restart: always
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+
+  admin-web:
+    build:
+      context: .
+      dockerfile: packages/admin-web/Dockerfile
+    restart: always
+    ports:
+      - "3002:80"
+    depends_on:
+      - backend
