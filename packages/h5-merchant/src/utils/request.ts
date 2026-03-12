@@ -4,7 +4,8 @@ import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
 
 const request = axios.create({
-  baseURL: '/api',
+  // Use environment variable for API URL, fallback to relative path /api
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 10000
 })
 

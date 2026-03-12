@@ -30,9 +30,10 @@ async function bootstrap() {
   SwaggerModule.setup('api-docs', app, document);
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
-  console.log(`应用运行在: http://localhost:${port}`);
-  console.log(`API 文档: http://localhost:${port}/api-docs`);
+  // Listen on 0.0.0.0 to allow external access
+  await app.listen(port, '0.0.0.0');
+  console.log(`应用运行在: http://0.0.0.0:${port}`);
+  console.log(`API 文档: http://0.0.0.0:${port}/api-docs`);
 }
 
 bootstrap();
