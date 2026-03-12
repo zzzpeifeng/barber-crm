@@ -22,7 +22,6 @@ RUN npm install
 
 # Copy source code
 COPY packages/backend ./packages/backend
-COPY .env ./packages/backend/.env
 # Build the application
 WORKDIR /app/packages/backend
 # Re-installing in the package directory might be needed if not using workspaces correctly in Docker context,
