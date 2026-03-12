@@ -22,11 +22,13 @@ RUN npm install
 
 # Copy source code
 COPY packages/backend ./packages/backend
-
+COPY .env ./packages/backend/.env
 # Build the application
 WORKDIR /app/packages/backend
-# Use npx to execute local binaries which is more robust than assuming path
-RUN npx nest build
+# Re-installing in the package directory might be needed if not using workspaces correctly in Docker context,
+# but let's try running build from here. If dependencies are at root/node_modules, node resolution should find them.
+# However, nest cli might be local.
+RUN ../../node_modules/.bin/nest build
 
 # Expose port
 EXPOSE 3000
