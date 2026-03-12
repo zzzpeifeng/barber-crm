@@ -27,7 +27,7 @@ WORKDIR /app/packages/backend
 # Re-installing in the package directory might be needed if not using workspaces correctly in Docker context,
 # but let's try running build from here. If dependencies are at root/node_modules, node resolution should find them.
 # However, nest cli might be local.
-RUN npx nest build
+RUN npm run build
 
 # Expose port
 EXPOSE 3000
