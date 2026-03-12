@@ -16,6 +16,9 @@ COPY packages/admin-web ./packages/admin-web
 
 # Build
 WORKDIR /app/packages/admin-web
+# Explicitly add root node_modules to PATH so that vite/vue-tsc binaries can be found
+ENV PATH /app/node_modules/.bin:$PATH
+
 RUN npm run build
 
 # Production stage

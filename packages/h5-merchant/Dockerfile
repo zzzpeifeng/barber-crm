@@ -16,6 +16,9 @@ COPY packages/h5-merchant ./packages/h5-merchant
 
 # Build
 WORKDIR /app/packages/h5-merchant
+# Explicitly add root node_modules to PATH so that vite/vue-tsc binaries can be found
+ENV PATH /app/node_modules/.bin:$PATH
+
 RUN npm run build
 
 # Production stage
