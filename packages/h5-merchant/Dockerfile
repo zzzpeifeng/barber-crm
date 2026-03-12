@@ -9,7 +9,7 @@ COPY package.json ./
 COPY packages/h5-merchant/package.json ./packages/h5-merchant/
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY packages/h5-merchant ./packages/h5-merchant

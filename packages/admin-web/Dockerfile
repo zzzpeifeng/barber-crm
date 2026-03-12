@@ -9,7 +9,7 @@ COPY package.json ./
 COPY packages/admin-web/package.json ./packages/admin-web/
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY packages/admin-web ./packages/admin-web
