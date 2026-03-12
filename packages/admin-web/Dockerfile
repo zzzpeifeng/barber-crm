@@ -3,21 +3,20 @@
 FROM node:18-alpine as builder
 
 WORKDIR /app
-RUN npm install -g pnpm
 
 # Copy package files
-COPY package.json pnpm-workspace.yaml ./
+COPY package.json ./
 COPY packages/admin-web/package.json ./packages/admin-web/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN npm install
 
 # Copy source code
 COPY packages/admin-web ./packages/admin-web
 
 # Build
 WORKDIR /app/packages/admin-web
-RUN pnpm build
+RUN npm run build
 
 # Production stage
 FROM nginx:alpine

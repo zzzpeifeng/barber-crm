@@ -3,21 +3,20 @@
 FROM node:18-alpine as builder
 
 WORKDIR /app
-RUN npm install -g pnpm
 
 # Copy package files
-COPY package.json pnpm-workspace.yaml ./
+COPY package.json ./
 COPY packages/h5-merchant/package.json ./packages/h5-merchant/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN npm install
 
 # Copy source code
 COPY packages/h5-merchant ./packages/h5-merchant
 
 # Build
 WORKDIR /app/packages/h5-merchant
-RUN pnpm build
+RUN npm run build
 
 # Production stage
 FROM nginx:alpine
