@@ -24,6 +24,9 @@ RUN npm install
 COPY packages/backend ./packages/backend
 # Build the application
 WORKDIR /app/packages/backend
+# Explicitly add root node_modules to PATH so that nest binary can be found
+ENV PATH /app/node_modules/.bin:$PATH
+
 # Re-installing in the package directory might be needed if not using workspaces correctly in Docker context,
 # but let's try running build from here. If dependencies are at root/node_modules, node resolution should find them.
 # However, nest cli might be local.
