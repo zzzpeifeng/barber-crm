@@ -30,10 +30,10 @@ ENV PATH /app/node_modules/.bin:$PATH
 # Re-installing in the package directory might be needed if not using workspaces correctly in Docker context,
 # but let's try running build from here. If dependencies are at root/node_modules, node resolution should find them.
 # However, nest cli might be local.
-RUN npm run build
+# RUN npm run build
 
 # Expose port
 EXPOSE 3000
 
-# Start command
-CMD ["npm", "run", "start:prod"]
+# Start command (using 'start' instead of 'start:prod' to compile at runtime)
+CMD ["npm", "run", "start"]
