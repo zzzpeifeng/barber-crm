@@ -208,7 +208,8 @@ const merchantShops = computed(() => {
 
 const loadMerchants = async () => {
   try {
-    merchants.value = await merchantApi.getMerchants()
+    const response = await merchantApi.getMerchants()
+    merchants.value = response.data
   } catch (error: any) {
     ElMessage.error(error.message || '加载商家失败')
   }
@@ -216,7 +217,8 @@ const loadMerchants = async () => {
 
 const loadShops = async () => {
   try {
-    shops.value = await shopApi.getShops()
+    const response = await shopApi.getShops()
+    shops.value = response.data
   } catch (error: any) {
     ElMessage.error(error.message || '加载店铺失败')
   }
@@ -225,7 +227,8 @@ const loadShops = async () => {
 const loadStores = async () => {
   loading.value = true
   try {
-    stores.value = await storeApi.getStores(searchForm.shopId)
+    const response = await storeApi.getStores(searchForm.shopId)
+    stores.value = response.data
     if (searchForm.name) {
       stores.value = stores.value.filter(store => 
         store.name.includes(searchForm.name)
@@ -255,7 +258,7 @@ const resetSearch = () => {
 
 const editStore = (store: Store) => {
   editingStore.value = store
-  selectedMerchantId.value = store.shop.merchantId
+  selectedMerchantId.value = store.shop?.merchantId
   Object.assign(storeForm, store)
   showCreateDialog.value = true
 }

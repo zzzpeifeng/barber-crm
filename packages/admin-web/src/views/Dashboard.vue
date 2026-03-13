@@ -59,15 +59,15 @@ const stats = ref({
 
 const loadStats = async () => {
   try {
-    const [merchants, shops, stores] = await Promise.all([
+    const [merchantsRes, shopsRes, storesRes] = await Promise.all([
       merchantApi.getMerchants(),
       shopApi.getShops(),
       storeApi.getStores()
     ])
     
-    stats.value.merchantCount = merchants.length
-    stats.value.shopCount = shops.length
-    stats.value.storeCount = stores.length
+    stats.value.merchantCount = merchantsRes.data.length
+    stats.value.shopCount = shopsRes.data.length
+    stats.value.storeCount = storesRes.data.length
     // 会员统计需要从会员表获取，这里暂时用模拟数据
     stats.value.memberCount = 128
   } catch (error) {

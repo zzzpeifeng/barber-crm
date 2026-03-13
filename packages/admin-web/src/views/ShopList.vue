@@ -152,7 +152,8 @@ const shopRules: FormRules = {
 
 const loadMerchants = async () => {
   try {
-    merchants.value = await merchantApi.getMerchants()
+    const response = await merchantApi.getMerchants()
+    merchants.value = response.data
   } catch (error: any) {
     ElMessage.error(error.message || '加载商家失败')
   }
@@ -161,7 +162,8 @@ const loadMerchants = async () => {
 const loadShops = async () => {
   loading.value = true
   try {
-    shops.value = await shopApi.getShops(searchForm.merchantId)
+    const response = await shopApi.getShops(searchForm.merchantId)
+    shops.value = response.data
     if (searchForm.name) {
       shops.value = shops.value.filter(shop => 
         shop.name.includes(searchForm.name)

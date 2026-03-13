@@ -92,7 +92,7 @@ const handleLogin = async () => {
     loading.value = true
     
     const response = await authApi.adminLogin(loginForm)
-    authStore.setAuth(response.user, response.access_token)
+    authStore.setAuth(response.data.user, response.data.access_token)
     
     ElMessage.success('登录成功')
     router.push('/admin/dashboard')
