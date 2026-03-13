@@ -39,7 +39,7 @@ request.interceptors.response.use(
     
     if (error.response?.status === 401) {
       authStore.logout()
-      router.push('/login')
+      router.push({ path: '/login' } as any)
       showToast('登录已过期，请重新登录')
     } else if (error.response?.status === 403) {
       showToast('权限不足')
