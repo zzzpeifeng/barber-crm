@@ -16,7 +16,9 @@ import { AdminModule } from './modules/admin/admin.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      ignoreEnvFile: false, // Try to load from .env file first
       envFilePath: '.env',
+      load: [],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: getDatabaseConfig,

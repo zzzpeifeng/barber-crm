@@ -21,8 +21,10 @@ WORKDIR /app/packages/backend
 ENV PATH /app/node_modules/.bin:$PATH
 ENV NODE_ENV=production
 
-# Build NestJS application
-RUN npm run build
+# Use TypeScript compiler directly instead of nest build
+RUN npx tsc -p tsconfig.json && \
+    echo "Build successful!" && \
+    ls -la dist/
 
 # Expose port
 EXPOSE 3000
