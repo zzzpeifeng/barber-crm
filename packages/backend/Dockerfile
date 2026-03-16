@@ -5,12 +5,12 @@ FROM node:18-alpine
 # Working directory
 WORKDIR /app
 
-# Copy package files
+# Copy root package files
 COPY package.json ./
+COPY pnpm-workspace.yaml ./
 COPY packages/backend/package.json ./packages/backend/
 
-# Install dependencies using npm
-# Use --legacy-peer-deps to avoid potential conflicts
+# Install dependencies
 RUN npm install --legacy-peer-deps
 
 # Copy source code
@@ -18,14 +18,14 @@ COPY packages/backend ./packages/backend
 
 # Build the application
 WORKDIR /app/packages/backend
-# Explicitly add root node_modules to PATH so that nest binary can be found
 ENV PATH /app/node_modules/.bin:$PATH
+ENV NODE_ENV=production
 
-# Re-enable build step to catch errors early
+# Build NestJS application
 RUN npm run build
 
 # Expose port
 EXPOSE 3000
 
 # Start command
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]
