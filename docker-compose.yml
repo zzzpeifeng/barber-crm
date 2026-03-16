@@ -19,7 +19,7 @@ services:
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
       - NODE_ENV=production
 
-admin-web:
+  admin-web:
     build:
       context: .
       dockerfile: packages/admin-web/Dockerfile
@@ -29,8 +29,7 @@ admin-web:
     depends_on:
       - backend
 
-
-h5-merchant:
+  h5-merchant:
     build:
       context: .
       dockerfile: packages/h5-merchant/Dockerfile
