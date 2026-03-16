@@ -13,4 +13,8 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   logging: configService.get<string>('NODE_ENV') === 'development',
   timezone: '+08:00',
   charset: 'utf8mb4',
+  extra: {
+    connectTimeout: 60000, // 60 seconds
+    connectionLimit: 10,
+  },
 });

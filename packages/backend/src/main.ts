@@ -29,6 +29,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
+  // Health check endpoint
+  app.use('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
   const port = process.env.PORT || 3000;
   // Listen on 0.0.0.0 to allow external access
   await app.listen(port, '0.0.0.0');
