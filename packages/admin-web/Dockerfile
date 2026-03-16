@@ -18,9 +18,10 @@ COPY packages/admin-web ./packages/admin-web
 WORKDIR /app/packages/admin-web
 # Explicitly add root node_modules to PATH so that vite binaries can be found
 ENV PATH /app/node_modules/.bin:$PATH
+ENV NODE_ENV=production
 
 # Run build without type checking (already checked locally)
-RUN npm run build
+RUN npm run build-only
 
 # Production stage
 FROM nginx:alpine

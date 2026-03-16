@@ -49,6 +49,7 @@ import { merchantApi } from '@/api/merchant'
 import { shopApi } from '@/api/shop'
 import { storeApi } from '@/api/store'
 import { memberApi } from '@/api/member'
+import { Shop, Location } from '@element-plus/icons-vue'
 
 const stats = ref({
   merchantCount: 0,
