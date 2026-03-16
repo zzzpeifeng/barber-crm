@@ -13,18 +13,14 @@ export default defineConfig({
     }
   },
   build: {
-    chunkSizeWarningLimit: 1500,
+    chunkSizeWarningLimit: 2000,
+    minify: 'esbuild',
+    sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'element-plus': ['element-plus'],
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
-          'axios': ['axios']
-        }
+        manualChunks: undefined // Disable manual chunks to prevent hangs
       }
-    },
-    minify: 'esbuild',
-    sourcemap: false
+    }
   },
   server: {
     port: 3002,
