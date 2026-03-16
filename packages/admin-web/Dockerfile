@@ -20,7 +20,7 @@ WORKDIR /app/packages/admin-web
 ENV PATH /app/node_modules/.bin:$PATH
 
 # Run build without type checking (already checked locally)
-RUN npm run dev
+RUN npm run build
 
 # Production stage
 FROM nginx:alpine
