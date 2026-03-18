@@ -2,8 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'barber-backend',
-      script: 'npm',
-      args: 'run start:prod',
+      script: 'dist/src/main.js',
       cwd: './packages/backend',
       instances: 1,
       autorestart: true,
@@ -20,7 +19,7 @@ module.exports = {
     },
     {
       name: 'barber-h5',
-      script: 'http-server',
+      script: './node_modules/http-server/bin/http-server',
       args: './dist -p 3001 --spa',
       cwd: './packages/h5-merchant',
       instances: 1,
@@ -37,7 +36,7 @@ module.exports = {
     },
     {
       name: 'barber-admin',
-      script: 'http-server',
+      script: './node_modules/http-server/bin/http-server',
       args: './dist -p 3002 --spa',
       cwd: './packages/admin-web',
       instances: 1,
