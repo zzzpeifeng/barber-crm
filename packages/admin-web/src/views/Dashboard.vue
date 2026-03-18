@@ -60,18 +60,24 @@ const stats = ref({
 
 const loadStats = async () => {
   try {
-    const [merchantsRes, shopsRes, storesRes,memberRes] = await Promise.all([
+    const [merchantsRes, shopsRes, storesRes, memberRes] = await Promise.all([
       merchantApi.getMerchants(),
       shopApi.getShops(),
       storeApi.getStores(),
       memberApi.getMembers()
     ])
-    console.log(merchantsRes)
-    stats.value.merchantCount = merchantsRes.length
-    stats.value.shopCount = shopsRes.length
-    stats.value.storeCount = storesRes.length
-    // 会员统计需要从会员表获取，这里暂时用模拟数据
-    stats.value.memberCount = memberRes.length
+    console.log('API 返回数据:', { merchantsRes, shopsRes, storesRes, memberRes })
+    // 调试：检查每个响应的数据结构
+    console.log('merchantsRes 类型:', typeof merchantsRes, '是否为数组:', Array.isArray(merchantsRes))
+    console.log('shopsRes 类型:', typeof shopsRes, '是否为数组:', Array.isArray(shopsRes))
+    console.log('storesRes 类型:', typeof storesRes, '是否为数组:', Array.isArray(storesRes))
+    console.log('memberRes 类型:', typeof memberRes, '是否为数组:', Array.isArray(memberRes))
+    
+    // 确保 stats 正确获取长度值
+    stats.value.merchantCount = Array.isArray(merchantsRes) ? merchantsRes.length : 0
+    stats.value.shopCount = Array.isArray(shopsRes) ? shopsRes.length : 0
+    stats.value.storeCount = Array.isArray(storesRes) ? storesRes.length : 0
+    stats.value.memberCount = Array.isArray(memberRes) ? memberRes.length : 0
   } catch (error) {
     console.error('加载统计数据失败:', error)
   }

@@ -92,7 +92,7 @@ const handleLogin = async () => {
     loading.value = true
 
     const response = await authApi.adminLogin(loginForm)
-    // 后端直接返回 { access_token, user }，没有包装在 data 中
+    // request 拦截器已经解包了响应，直接使用返回的数据
     authStore.setAuth(response.user, response.access_token)
 
     ElMessage.success('登录成功')

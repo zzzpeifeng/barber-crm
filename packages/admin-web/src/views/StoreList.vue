@@ -209,6 +209,7 @@ const merchantShops = computed(() => {
 const loadMerchants = async () => {
   try {
     const data = await merchantApi.getMerchants()
+    // request 拦截器已经解包了响应，直接使用返回的数据
     merchants.value = data || []
   } catch (error: any) {
     ElMessage.error(error.message || '加载商家失败')
@@ -218,6 +219,7 @@ const loadMerchants = async () => {
 const loadShops = async () => {
   try {
     const data = await shopApi.getShops()
+    // request 拦截器已经解包了响应，直接使用返回的数据
     shops.value = data || []
   } catch (error: any) {
     ElMessage.error(error.message || '加载店铺失败')
@@ -228,6 +230,7 @@ const loadStores = async () => {
   loading.value = true
   try {
     const data = await storeApi.getStores(searchForm.shopId)
+    // request 拦截器已经解包了响应，直接使用返回的数据
     stores.value = data || []
     if (searchForm.name) {
       stores.value = stores.value.filter(store =>

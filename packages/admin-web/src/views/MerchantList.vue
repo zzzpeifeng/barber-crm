@@ -143,6 +143,7 @@ const loadMerchants = async () => {
   loading.value = true
   try {
     const data = await merchantApi.getMerchants()
+    // request 拦截器已经解包了响应，直接使用返回的数据
     merchants.value = data || []
   } catch (error: any) {
     ElMessage.error(error.message || '加载失败')

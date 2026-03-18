@@ -1,13 +1,23 @@
 import axios from 'axios'
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
+
+// 定义类型安全的请求方法，解包 AxiosResponse
+interface TypedRequest extends Omit<AxiosInstance, 'get' | 'post' | 'put' | 'patch' | 'delete'> {
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
+  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
+}
 
 const request = axios.create({
   // Use environment variable for API URL, fallback to relative path /api
   baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 10000
-})
+}) as TypedRequest
 
 // 请求拦截器
 request.interceptors.request.use(
@@ -23,12 +33,11 @@ request.interceptors.request.use(
   }
 )
 
-// 响应拦截器
+// 响应拦截器 - 解包数据
 request.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     const { data } = response
 
-    // 后端直接返回数据，没有包装在 code/data 结构中
     // 如果包含 code 字段，则按照标准响应格式处理
     if (typeof data === 'object' && data !== null && 'code' in data) {
       if (data.code === 200) {
@@ -39,7 +48,7 @@ request.interceptors.response.use(
       }
     }
 
-    // 直接返回数据
+    // 直接返回数据（后端 NestJS 直接返回数据）
     return data
   },
   (error) => {
