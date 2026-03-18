@@ -10,7 +10,7 @@ COPY package.json ./
 COPY pnpm-workspace.yaml ./
 COPY packages/backend/package.json ./packages/backend/
 
-# Install dependencies
+# Install all dependencies (including devDependencies for build)
 RUN npm install --legacy-peer-deps
 
 # Copy source code
@@ -21,11 +21,11 @@ COPY packages/backend/.env ./packages/backend/
 
 # Build the application
 WORKDIR /app/packages/backend
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
 ENV NODE_ENV=production
 
-# Use TypeScript compiler directly instead of nest build
-RUN npx tsc -p tsconfig.json && \
+# Use nest build instead of tsc directly
+RUN npm run build && \
     echo "Build successful!" && \
     ls -la dist/
 
