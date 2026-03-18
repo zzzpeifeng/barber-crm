@@ -19,8 +19,8 @@ module.exports = {
     },
     {
       name: 'barber-h5',
-      script: './node_modules/http-server/bin/http-server',
-      args: './dist -p 3001 --spa',
+      script: 'serve',
+      args: './dist -l 3001 -s',
       cwd: './packages/h5-merchant',
       instances: 1,
       autorestart: true,
@@ -36,8 +36,8 @@ module.exports = {
     },
     {
       name: 'barber-admin',
-      script: './node_modules/http-server/bin/http-server',
-      args: './dist -p 3002 --spa',
+      script: 'serve',
+      args: './dist -l 3002 -s',
       cwd: './packages/admin-web',
       instances: 1,
       autorestart: true,
