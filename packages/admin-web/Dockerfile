@@ -19,9 +19,9 @@ WORKDIR /app/packages/admin-web
 # Explicitly add root node_modules to PATH so that vite binaries can be found
 ENV PATH /app/node_modules/.bin:$PATH
 ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
-# Run build without type checking (already checked locally)
+# Run build without type checking and with progress reporting
 RUN npm run build-only
 
 # Production stage

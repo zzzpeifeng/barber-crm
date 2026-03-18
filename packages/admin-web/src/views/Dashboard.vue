@@ -60,17 +60,18 @@ const stats = ref({
 
 const loadStats = async () => {
   try {
-    const [merchantsRes, shopsRes, storesRes] = await Promise.all([
+    const [merchantsRes, shopsRes, storesRes,memberRes] = await Promise.all([
       merchantApi.getMerchants(),
       shopApi.getShops(),
-      storeApi.getStores()
+      storeApi.getStores(),
+      memberApi.getMembers()
     ])
-    
-    stats.value.merchantCount = merchantsRes.data.length
-    stats.value.shopCount = shopsRes.data.length
-    stats.value.storeCount = storesRes.data.length
+    console.log(merchantsRes)
+    stats.value.merchantCount = merchantsRes.length
+    stats.value.shopCount = shopsRes.length
+    stats.value.storeCount = storesRes.length
     // 会员统计需要从会员表获取，这里暂时用模拟数据
-    stats.value.memberCount = 128
+    stats.value.memberCount = memberRes.length
   } catch (error) {
     console.error('加载统计数据失败:', error)
   }

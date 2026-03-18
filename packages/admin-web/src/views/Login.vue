@@ -86,14 +86,15 @@ const loginRules: FormRules = {
 
 const handleLogin = async () => {
   if (!loginFormRef.value) return
-  
+
   try {
     await loginFormRef.value.validate()
     loading.value = true
-    
+
     const response = await authApi.adminLogin(loginForm)
-    authStore.setAuth(response.data.user, response.data.access_token)
-    
+    // 后端直接返回 { access_token, user }，没有包装在 data 中
+    authStore.setAuth(response.user, response.access_token)
+
     ElMessage.success('登录成功')
     router.push('/admin/dashboard')
   } catch (error: any) {

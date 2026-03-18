@@ -208,8 +208,8 @@ const merchantShops = computed(() => {
 
 const loadMerchants = async () => {
   try {
-    const response = await merchantApi.getMerchants()
-    merchants.value = response.data
+    const data = await merchantApi.getMerchants()
+    merchants.value = data || []
   } catch (error: any) {
     ElMessage.error(error.message || '加载商家失败')
   }
@@ -217,8 +217,8 @@ const loadMerchants = async () => {
 
 const loadShops = async () => {
   try {
-    const response = await shopApi.getShops()
-    shops.value = response.data
+    const data = await shopApi.getShops()
+    shops.value = data || []
   } catch (error: any) {
     ElMessage.error(error.message || '加载店铺失败')
   }
@@ -227,10 +227,10 @@ const loadShops = async () => {
 const loadStores = async () => {
   loading.value = true
   try {
-    const response = await storeApi.getStores(searchForm.shopId)
-    stores.value = response.data
+    const data = await storeApi.getStores(searchForm.shopId)
+    stores.value = data || []
     if (searchForm.name) {
-      stores.value = stores.value.filter(store => 
+      stores.value = stores.value.filter(store =>
         store.name.includes(searchForm.name)
       )
     }

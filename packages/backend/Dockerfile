@@ -16,6 +16,9 @@ RUN npm install --legacy-peer-deps
 # Copy source code
 COPY packages/backend ./packages/backend
 
+# Copy .env file for build time
+COPY packages/backend/.env ./packages/backend/
+
 # Build the application
 WORKDIR /app/packages/backend
 ENV PATH /app/node_modules/.bin:$PATH
@@ -30,4 +33,6 @@ RUN npx tsc -p tsconfig.json && \
 EXPOSE 3000
 
 # Start command
+# Set NODE_OPTIONS for production
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 CMD ["node", "dist/main.js"]

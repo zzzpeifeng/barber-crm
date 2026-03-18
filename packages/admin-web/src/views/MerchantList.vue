@@ -142,8 +142,8 @@ const merchantRules: FormRules = {
 const loadMerchants = async () => {
   loading.value = true
   try {
-    const response = await merchantApi.getMerchants()
-    merchants.value = response.data
+    const data = await merchantApi.getMerchants()
+    merchants.value = data || []
   } catch (error: any) {
     ElMessage.error(error.message || '加载失败')
   } finally {
