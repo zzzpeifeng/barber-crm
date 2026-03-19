@@ -71,18 +71,26 @@ show_status() {
 # 部署后端
 deploy_backend() {
     print_info "开始部署后端服务..."
-    
+
     cd "$SCRIPT_DIR/packages/backend"
-    
+
     print_info "构建后端项目..."
     npm run build
-    
-    print_info "重启后端服务..."
+
+    print_info "启动/重启后端服务..."
     cd "$SCRIPT_DIR"
-    pm2 restart barber-backend
-    
+
+    # 检查进程是否存在
+    if pm2 describe barber-backend > /dev/null 2>&1; then
+        print_info "后端服务已存在，执行重启..."
+        pm2 restart barber-backend
+    else
+        print_info "首次部署后端服务，执行启动..."
+        pm2 start ecosystem.config.js --only barber-backend
+    fi
+
     sleep 2
-    
+
     if pm2 describe barber-backend | grep -q "status.*online"; then
         print_success "后端服务部署成功！"
     else
@@ -95,18 +103,26 @@ deploy_backend() {
 # 部署管理后台
 deploy_admin() {
     print_info "开始部署管理后台..."
-    
+
     cd "$SCRIPT_DIR/packages/admin-web"
-    
+
     print_info "构建管理后台..."
     npm run build
-    
-    print_info "重启管理后台服务..."
+
+    print_info "启动/重启管理后台服务..."
     cd "$SCRIPT_DIR"
-    pm2 restart barber-admin
-    
+
+    # 检查进程是否存在
+    if pm2 describe barber-admin > /dev/null 2>&1; then
+        print_info "管理后台服务已存在，执行重启..."
+        pm2 restart barber-admin
+    else
+        print_info "首次部署管理后台服务，执行启动..."
+        pm2 start ecosystem.config.js --only barber-admin
+    fi
+
     sleep 2
-    
+
     if pm2 describe barber-admin | grep -q "status.*online"; then
         print_success "管理后台部署成功！"
     else
@@ -119,18 +135,26 @@ deploy_admin() {
 # 部署H5商家端
 deploy_h5() {
     print_info "开始部署H5商家端..."
-    
+
     cd "$SCRIPT_DIR/packages/h5-merchant"
-    
+
     print_info "构建H5商家端..."
     npm run build
-    
-    print_info "重启H5商家端服务..."
+
+    print_info "启动/重启H5商家端服务..."
     cd "$SCRIPT_DIR"
-    pm2 restart barber-h5
-    
+
+    # 检查进程是否存在
+    if pm2 describe barber-h5 > /dev/null 2>&1; then
+        print_info "H5商家端服务已存在，执行重启..."
+        pm2 restart barber-h5
+    else
+        print_info "首次部署H5商家端服务，执行启动..."
+        pm2 start ecosystem.config.js --only barber-h5
+    fi
+
     sleep 2
-    
+
     if pm2 describe barber-h5 | grep -q "status.*online"; then
         print_success "H5商家端部署成功！"
     else
