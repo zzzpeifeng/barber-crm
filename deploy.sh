@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # 快速部署脚本 - 根据传入的参数构建并重启对应服务
+# 使用说明: 在项目根目录下执行 ./deploy.sh [选项]
 
 set -e
 
+# 获取脚本所在目录的父目录（项目根目录）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 颜色定义
 RED='\033[0;31m'
@@ -30,7 +33,7 @@ print_error() {
 
 # 显示帮助信息
 show_help() {
-    echo "用法: $0 [服务名称]"
+    echo "用法: ./deploy.sh [服务名称]"
     echo ""
     echo "服务选项:"
     echo "  backend     - 仅部署后端服务"
@@ -41,9 +44,15 @@ show_help() {
     echo "  status      - 查看服务状态"
     echo ""
     echo "示例:"
-    echo "  $0 all        # 部署所有服务"
-    echo "  $0 backend    # 仅部署后端"
-    echo "  $0 status     # 查看状态"
+    echo "  ./deploy.sh            # 部署所有服务"
+    echo "  ./deploy.sh all        # 部署所有服务"
+    echo "  ./deploy.sh backend    # 仅部署后端"
+    echo "  ./deploy.sh admin      # 仅部署管理后台"
+    echo "  ./deploy.sh h5         # 仅部署H5商家端"
+    echo "  ./deploy.sh frontend   # 部署所有前端服务"
+    echo "  ./deploy.sh status     # 查看状态"
+    echo ""
+    echo "说明: 脚本自动检测项目根目录，可以在任何位置执行"
 }
 
 # 查看服务状态
@@ -63,13 +72,13 @@ show_status() {
 deploy_backend() {
     print_info "开始部署后端服务..."
     
-    cd "$PROJECT_ROOT/packages/backend"
+    cd "$SCRIPT_DIR/packages/backend"
     
     print_info "构建后端项目..."
     npm run build
     
     print_info "重启后端服务..."
-    cd "$PROJECT_ROOT"
+    cd "$SCRIPT_DIR"
     pm2 restart barber-backend
     
     sleep 2
@@ -87,13 +96,13 @@ deploy_backend() {
 deploy_admin() {
     print_info "开始部署管理后台..."
     
-    cd "$PROJECT_ROOT/packages/admin-web"
+    cd "$SCRIPT_DIR/packages/admin-web"
     
     print_info "构建管理后台..."
     npm run build
     
     print_info "重启管理后台服务..."
-    cd "$PROJECT_ROOT"
+    cd "$SCRIPT_DIR"
     pm2 restart barber-admin
     
     sleep 2
@@ -111,13 +120,13 @@ deploy_admin() {
 deploy_h5() {
     print_info "开始部署H5商家端..."
     
-    cd "$PROJECT_ROOT/packages/h5-merchant"
+    cd "$SCRIPT_DIR/packages/h5-merchant"
     
     print_info "构建H5商家端..."
     npm run build
     
     print_info "重启H5商家端服务..."
-    cd "$PROJECT_ROOT"
+    cd "$SCRIPT_DIR"
     pm2 restart barber-h5
     
     sleep 2
