@@ -4,8 +4,6 @@
 
 set -e
 
-PROJECT_ROOT="/Users/SL/CodeBuddy/20260201123311"
-cd "$PROJECT_ROOT"
 
 # 颜色定义
 RED='\033[0;31m'
