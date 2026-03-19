@@ -6,6 +6,7 @@ import { ResponseInterceptor } from './common/response.interceptor';
 import { getDatabaseConfig } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { MerchantModule } from './modules/merchant/merchant.module';
+import { MerchantUserModule } from './modules/merchant-user/merchant-user.module';
 import { ShopModule } from './modules/shop/shop.module';
 import { StoreModule } from './modules/store/store.module';
 import { MemberModule } from './modules/member/member.module';
@@ -26,6 +27,7 @@ import { AdminModule } from './modules/admin/admin.module';
     }),
     AuthModule,
     MerchantModule,
+    MerchantUserModule,
     ShopModule,
     StoreModule,
     MemberModule,

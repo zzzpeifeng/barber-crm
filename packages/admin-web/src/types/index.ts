@@ -20,6 +20,18 @@ export interface Merchant {
   updatedAt: string
 }
 
+export interface MerchantUser {
+  id: number
+  merchantId: number
+  username: string
+  realName?: string
+  role: 'owner' | 'manager' | 'staff'
+  status: number
+  createdAt: string
+  updatedAt: string
+  merchant?: Merchant
+}
+
 export interface Shop {
   id: number
   merchantId: number
