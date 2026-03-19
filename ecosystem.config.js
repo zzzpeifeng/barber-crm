@@ -29,6 +29,7 @@ module.exports = {
       max_memory_restart: '500M',
       env: {
         NODE_ENV: 'production',
+        VITE_API_URL: 'http://localhost:3000',
       },
       error_file: './logs/h5-error.log',
       out_file: './logs/h5-out.log',
@@ -47,6 +48,7 @@ module.exports = {
       max_memory_restart: '500M',
       env: {
         NODE_ENV: 'production',
+        VITE_API_URL: 'http://localhost:3000',
       },
       error_file: './logs/admin-error.log',
       out_file: './logs/admin-out.log',
