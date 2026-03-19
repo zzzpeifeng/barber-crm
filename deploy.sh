@@ -1,12 +1,15 @@
 #!/bin/bash
 
 # 快速部署脚本 - 根据传入的参数构建并重启对应服务
-# 使用说明: 在项目根目录下执行 ./deploy.sh [选项]
+# 使用说明: 在项目根目录下执行 ./deploy.sh [选项] [服务器IP]
 
 set -e
 
 # 获取脚本所在目录的父目录（项目根目录）
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# 获取服务器IP地址（默认localhost）
+SERVER_IP="${2:-localhost}"
 
 # 颜色定义
 RED='\033[0;31m'
@@ -106,8 +109,8 @@ deploy_admin() {
 
     cd "$SCRIPT_DIR/packages/admin-web"
 
-    print_info "构建管理后台..."
-    npm run build
+    print_info "构建管理后台 (API URL: http://${SERVER_IP}:3000)..."
+    VITE_API_URL="http://${SERVER_IP}:3000" npm run build
 
     print_info "启动/重启管理后台服务..."
     cd "$SCRIPT_DIR"
@@ -138,8 +141,8 @@ deploy_h5() {
 
     cd "$SCRIPT_DIR/packages/h5-merchant"
 
-    print_info "构建H5商家端..."
-    npm run build
+    print_info "构建H5商家端 (API URL: http://${SERVER_IP}:3000)..."
+    VITE_API_URL="http://${SERVER_IP}:3000" npm run build
 
     print_info "启动/重启H5商家端服务..."
     cd "$SCRIPT_DIR"
