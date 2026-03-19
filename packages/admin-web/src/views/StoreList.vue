@@ -2,7 +2,7 @@
   <div>
     <div class="table-header">
       <h1 class="page-title">门店管理</h1>
-      <el-button type="primary" @click="showCreateDialog = true">
+      <el-button type="primary" @click="handleOpenCreateDialog">
         <el-icon><Plus /></el-icon>
         新增门店
       </el-button>
@@ -16,6 +16,7 @@
             v-model="searchForm.merchantId"
             placeholder="请选择商家"
             clearable
+            style="width: 250px"
             @change="onMerchantChange"
           >
             <el-option
@@ -111,6 +112,7 @@
               :key="merchant.id"
               :label="merchant.name"
               :value="merchant.id"
+              style="width:100vh"
             />
           </el-select>
         </el-form-item>
@@ -149,7 +151,7 @@
       </el-form>
       
       <template #footer>
-        <el-button @click="showCreateDialog = false">取消</el-button>
+        <el-button @click="handleCloseDialog">取消</el-button>
         <el-button type="primary" :loading="submitting" @click="submitStore">
           确定
         </el-button>
@@ -260,6 +262,7 @@ const resetSearch = () => {
 }
 
 const editStore = (store: Store) => {
+  resetForm()
   editingStore.value = store
   selectedMerchantId.value = store.shop?.merchantId
   Object.assign(storeForm, store)
@@ -321,6 +324,29 @@ const submitStore = async () => {
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleString('zh-CN')
+}
+
+const resetForm = () => {
+  Object.assign(storeForm, {
+    shopId: undefined,
+    name: '',
+    address: '',
+    phone: '',
+    remark: ''
+  })
+  editingStore.value = null
+  selectedMerchantId.value = undefined
+  storeFormRef.value?.clearValidate()
+}
+
+const handleOpenCreateDialog = () => {
+  resetForm()
+  showCreateDialog.value = true
+}
+
+const handleCloseDialog = () => {
+  resetForm()
+  showCreateDialog.value = false
 }
 
 onMounted(() => {

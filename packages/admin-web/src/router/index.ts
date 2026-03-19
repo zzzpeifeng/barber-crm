@@ -24,9 +24,15 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'merchants',
-        name: 'MerchantList',
-        component: () => import('@/views/MerchantList.vue'),
+        name: 'MerchantManagement',
+        component: () => import('@/views/MerchantManagement.vue'),
         meta: { title: '商家管理' }
+      },
+      {
+        path: 'merchant-users',
+        name: 'MerchantUserList',
+        component: () => import('@/views/MerchantUserList.vue'),
+        meta: { title: '商家用户管理' }
       },
       {
         path: 'shops',

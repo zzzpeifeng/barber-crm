@@ -2,7 +2,7 @@
   <div>
     <div class="table-header">
       <h1 class="page-title">店铺管理</h1>
-      <el-button type="primary" @click="showCreateDialog = true">
+      <el-button type="primary" @click="handleOpenCreateDialog">
         <el-icon><Plus /></el-icon>
         新增店铺
       </el-button>
@@ -16,6 +16,7 @@
             v-model="searchForm.merchantId"
             placeholder="请选择商家"
             clearable
+            style="width: 250px"
           >
             <el-option
               v-for="merchant in merchants"
@@ -109,7 +110,7 @@
       </el-form>
       
       <template #footer>
-        <el-button @click="showCreateDialog = false">取消</el-button>
+        <el-button @click="handleCloseDialog">取消</el-button>
         <el-button type="primary" :loading="submitting" @click="submitShop">
           确定
         </el-button>
@@ -150,6 +151,27 @@ const shopRules: FormRules = {
   name: [{ required: true, message: '请输入店铺名称', trigger: 'blur' }]
 }
 
+const resetForm = () => {
+  editingShop.value = null
+  Object.assign(shopForm, {
+    merchantId: undefined,
+    name: '',
+    description: ''
+  })
+  if (shopFormRef.value) {
+    shopFormRef.value.clearValidate()
+  }
+}
+
+const handleOpenCreateDialog = () => {
+  resetForm()
+  showCreateDialog.value = true
+}
+
+const handleCloseDialog = () => {
+  showCreateDialog.value = false
+}
+
 const loadMerchants = async () => {
   try {
     const data = await merchantApi.getMerchants()
@@ -185,6 +207,7 @@ const resetSearch = () => {
 }
 
 const editShop = (shop: Shop) => {
+  resetForm()
   editingShop.value = shop
   Object.assign(shopForm, shop)
   showCreateDialog.value = true

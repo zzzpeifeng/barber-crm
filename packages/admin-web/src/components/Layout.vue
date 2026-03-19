@@ -22,6 +22,11 @@
           <el-icon><Shop /></el-icon>
           <span>商家管理</span>
         </el-menu-item>
+
+        <el-menu-item index="/admin/merchant-users">
+          <el-icon><User /></el-icon>
+          <span>商家用户管理</span>
+        </el-menu-item>
         
         <el-menu-item index="/admin/shops">
           <el-icon><Store /></el-icon>

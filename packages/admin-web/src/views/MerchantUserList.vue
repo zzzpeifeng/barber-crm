@@ -2,7 +2,7 @@
   <div>
     <div class="table-header">
       <h1 class="page-title">商家用户管理</h1>
-      <el-button type="primary" @click="showCreateDialog = true">
+      <el-button type="primary" @click="handleOpenCreateDialog">
         <el-icon><Plus /></el-icon>
         新增用户
       </el-button>
@@ -127,7 +127,7 @@
       </el-form>
       
       <template #footer>
-        <el-button @click="showCreateDialog = false">取消</el-button>
+        <el-button @click="handleCloseDialog">取消</el-button>
         <el-button type="primary" :loading="submitting" @click="submitMerchantUser">
           确定
         </el-button>
@@ -170,6 +170,30 @@ const merchantUserRules: FormRules = {
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   role: [{ required: true, message: '请选择角色', trigger: 'change' }],
   passwordHash: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+}
+
+const resetForm = () => {
+  editingMerchantUser.value = null
+  Object.assign(merchantUserForm, {
+    merchantId: undefined,
+    username: '',
+    realName: '',
+    passwordHash: '',
+    role: 'owner',
+    status: 1
+  })
+  if (merchantUserFormRef.value) {
+    merchantUserFormRef.value.clearValidate()
+  }
+}
+
+const handleOpenCreateDialog = () => {
+  resetForm()
+  showCreateDialog.value = true
+}
+
+const handleCloseDialog = () => {
+  showCreateDialog.value = false
 }
 
 const loadMerchants = async () => {
@@ -221,6 +245,7 @@ const getStatusType = (status: number) => {
 }
 
 const editMerchantUser = (merchantUser: MerchantUser) => {
+  resetForm()
   editingMerchantUser.value = merchantUser
   Object.assign(merchantUserForm, {
     merchantId: merchantUser.merchantId,
@@ -274,15 +299,7 @@ const submitMerchantUser = async () => {
     }
     
     showCreateDialog.value = false
-    editingMerchantUser.value = null
-    Object.assign(merchantUserForm, {
-      merchantId: undefined,
-      username: '',
-      realName: '',
-      passwordHash: '',
-      role: 'owner',
-      status: 1
-    })
+    resetForm()
     loadMerchantUsers()
   } catch (error: any) {
     ElMessage.error(error.message || '操作失败')

@@ -14,7 +14,9 @@ export class ShopController {
   @Post()
   @Roles('super_admin', 'owner')
   create(@Body() createShopDto: Partial<Shop>, @Merchant() merchantId?: number) {
-    return this.shopService.create({ ...createShopDto, merchantId });
+    // 优先使用请求体中的 merchantId（super_admin 用户创建时需要指定），如果没有则使用装饰器提取的 merchantId（商家用户创建时使用）
+    const finalMerchantId = createShopDto.merchantId ?? merchantId;
+    return this.shopService.create({ ...createShopDto, merchantId: finalMerchantId });
   }
 
   @Get()
