@@ -53,20 +53,56 @@ export class StoreService {
       createdAt: store.createdAt,
       updatedAt: store.updatedAt,
       shopName: store.shop.name,
+      merchantId: store.shop.merchantId,
       merchantName: store.shop.merchant.name,
     }));
   }
 
   async findOne(id: number) {
-    return this.storeRepo.findOne({
+    const store = await this.storeRepo.findOne({
       where: { id },
-      relations: ['shop'],
+      relations: ['shop', 'shop.merchant'],
+      select: {
+        id: true,
+        shopId: true,
+        name: true,
+        address: true,
+        phone: true,
+        remark: true,
+        createdAt: true,
+        updatedAt: true,
+        shop: {
+          id: true,
+          name: true,
+          merchantId: true,
+          merchant: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
+
+    if (!store) return null;
+
+    // 返回展平的数据结构
+    return {
+      id: store.id,
+      shopId: store.shopId,
+      name: store.name,
+      address: store.address,
+      phone: store.phone,
+      remark: store.remark,
+      createdAt: store.createdAt,
+      updatedAt: store.updatedAt,
+      shopName: store.shop.name,
+      merchantName: store.shop.merchant.name,
+    };
   }
 
   async update(id: number, updateStoreDto: Partial<Store>) {
     await this.storeRepo.update(id, updateStoreDto);
-    return this.storeRepo.findOne({ where: { id } });
+    return this.findOne(id);
   }
 
   async remove(id: number) {

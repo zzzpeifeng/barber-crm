@@ -53,6 +53,9 @@ export interface Store {
   createdAt: string
   updatedAt: string
   shop?: Shop
+  shopName?: string
+  merchantId?: number
+  merchantName?: string
 }
 
 export interface Member {

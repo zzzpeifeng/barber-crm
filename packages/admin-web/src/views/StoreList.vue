@@ -100,19 +100,19 @@
         :rules="storeRules"
         label-width="100px"
       >
-        <el-form-item label="所属商家" prop="shopId">
+        <el-form-item label="所属商家" prop="merchantId">
           <el-select
             v-model="selectedMerchantId"
             placeholder="请选择商家"
             style="width: 100%"
             @change="onMerchantSelectChange"
+            clearable
           >
             <el-option
               v-for="merchant in merchants"
               :key="merchant.id"
               :label="merchant.name"
               :value="merchant.id"
-              style="width:100vh"
             />
           </el-select>
         </el-form-item>
@@ -122,6 +122,8 @@
             placeholder="请选择店铺"
             style="width: 100%"
             :disabled="!selectedMerchantId"
+            clearable
+            @change="onShopSelectChange"
           >
             <el-option
               v-for="shop in merchantShops"
@@ -176,6 +178,11 @@ const merchants = ref<Merchant[]>([])
 const showCreateDialog = ref(false)
 const editingStore = ref<Store | null>(null)
 const selectedMerchantId = ref<number | undefined>(undefined)
+// 弹窗专用的店铺列表，独立于全局 shops
+const dialogShops = ref<Shop[]>([])
+
+const test_merchantId = ref<number | undefined>(undefined)
+test_merchantId.value = 2
 
 const storeFormRef = ref<FormInstance>()
 
@@ -186,6 +193,7 @@ const searchForm = reactive({
 })
 
 const storeForm = reactive({
+  merchantId: undefined as number | undefined,
   shopId: undefined as number | undefined,
   name: '',
   address: '',
@@ -194,6 +202,7 @@ const storeForm = reactive({
 })
 
 const storeRules: FormRules = {
+  merchantId: [{ required: true, message: '请选择所属商家', trigger: 'change' }],
   shopId: [{ required: true, message: '请选择所属店铺', trigger: 'change' }],
   name: [{ required: true, message: '请输入门店名称', trigger: 'blur' }]
 }
@@ -205,7 +214,8 @@ const filteredShops = computed(() => {
 
 const merchantShops = computed(() => {
   if (!selectedMerchantId.value) return []
-  return shops.value.filter(shop => shop.merchantId === selectedMerchantId.value)
+  // 使用弹窗专用的店铺列表进行精确过滤
+  return dialogShops.value.filter(shop => shop.merchantId === selectedMerchantId.value)
 })
 
 const loadMerchants = async () => {
@@ -250,8 +260,29 @@ const onMerchantChange = () => {
   searchForm.shopId = undefined
 }
 
-const onMerchantSelectChange = () => {
+const onMerchantSelectChange = async () => {
   storeForm.shopId = undefined
+  // 当选择商家后，精确加载该商家的店铺数据到弹窗专用列表
+  if (selectedMerchantId.value) {
+    await loadDialogShopsByMerchant(selectedMerchantId.value)
+  }
+  // 清除商家字段的验证错误
+  storeFormRef.value?.clearValidate(['merchantId'])
+}
+
+const onShopSelectChange = () => {
+  // 选择店铺后，清除商家和店铺的验证错误
+  storeFormRef.value?.clearValidate(['merchantId', 'shopId'])
+}
+
+// 根据商家ID加载弹窗专用的店铺数据（精确加载，不影响全局shops）
+const loadDialogShopsByMerchant = async (merchantId: number) => {
+  try {
+    const data = await shopApi.getShops(merchantId)
+    dialogShops.value = data || []
+  } catch (error: any) {
+    ElMessage.error(error.message || '加载店铺失败')
+  }
 }
 
 const resetSearch = () => {
@@ -261,11 +292,28 @@ const resetSearch = () => {
   loadStores()
 }
 
-const editStore = (store: Store) => {
+const editStore = async (store: Store) => {
   resetForm()
   editingStore.value = store
-  selectedMerchantId.value = store.shopId
-  Object.assign(storeForm, store)
+
+  // 基于 shopId 精确加载所属商家的店铺数据
+  // 注意：store.shopId 是所属店铺的 ID，需要通过该店铺找到对应的 merchantId
+  const targetShop = shops.value.find(s => s.id === store.shopId)
+  const merchantId = targetShop?.merchantId || store.shopId
+
+  selectedMerchantId.value = merchantId
+
+  // 精确加载该商家的店铺数据到弹窗专用列表
+  await loadDialogShopsByMerchant(merchantId)
+
+  Object.assign(storeForm, {
+    merchantId: merchantId,
+    shopId: store.shopId,
+    name: store.name,
+    address: store.address,
+    phone: store.phone,
+    remark: store.remark
+  })
   showCreateDialog.value = true
 }
 
@@ -291,23 +339,36 @@ const deleteStore = (store: Store) => {
 
 const submitStore = async () => {
   if (!storeFormRef.value) return
-  
+
   try {
     await storeFormRef.value.validate()
     submitting.value = true
-    
+
+    // 基于 selectedMerchantId 和 shopId 精确提交数据
+    const submitData = {
+      name: storeForm.name,
+      address: storeForm.address,
+      phone: storeForm.phone,
+      remark: storeForm.remark,
+      shopId: storeForm.shopId,
+      // 使用弹窗中选择的商家 ID，确保数据准确关联
+      merchantId: selectedMerchantId.value!
+    }
+
     if (editingStore.value) {
-      await storeApi.updateStore(editingStore.value.id, storeForm)
+      await storeApi.updateStore(editingStore.value.id, submitData)
       ElMessage.success('更新成功')
     } else {
-      await storeApi.createStore(storeForm)
+      await storeApi.createStore(submitData)
       ElMessage.success('创建成功')
     }
-    
+
     showCreateDialog.value = false
     editingStore.value = null
     selectedMerchantId.value = undefined
+    dialogShops.value = [] // 清空弹窗专用店铺列表
     Object.assign(storeForm, {
+      merchantId: undefined,
       shopId: undefined,
       name: '',
       address: '',
@@ -315,6 +376,8 @@ const submitStore = async () => {
       remark: ''
     })
     loadStores()
+    // 重新加载所有店铺数据
+    await loadShops()
   } catch (error: any) {
     ElMessage.error(error.message || '操作失败')
   } finally {
@@ -328,6 +391,7 @@ const formatDate = (dateString: string) => {
 
 const resetForm = () => {
   Object.assign(storeForm, {
+    merchantId: undefined,
     shopId: undefined,
     name: '',
     address: '',
@@ -341,6 +405,8 @@ const resetForm = () => {
 
 const handleOpenCreateDialog = () => {
   resetForm()
+  // 清空弹窗专用店铺列表，确保新增时从空白状态开始
+  dialogShops.value = []
   showCreateDialog.value = true
 }
 
