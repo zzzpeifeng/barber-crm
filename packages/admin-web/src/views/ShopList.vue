@@ -50,7 +50,7 @@
       >
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="name" label="店铺名称" min-width="120" />
-        <el-table-column prop="merchant.name" label="所属商家" min-width="120" />
+        <el-table-column prop="merchantName" label="所属商家" min-width="120" />
         <el-table-column prop="description" label="店铺简介" min-width="150" />
         <el-table-column prop="createdAt" label="创建时间" min-width="180">
           <template #default="{ row }">

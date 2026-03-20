@@ -17,11 +17,44 @@ export class StoreService {
 
   async findAll(shopId?: number) {
     const where = shopId ? { shopId } : {};
-    return this.storeRepo.find({
+    const stores = await this.storeRepo.find({
       where,
-      relations: ['shop'],
+      relations: ['shop', 'shop.merchant'],
+      select: {
+        id: true,
+        shopId: true,
+        name: true,
+        address: true,
+        phone: true,
+        remark: true,
+        createdAt: true,
+        updatedAt: true,
+        shop: {
+          id: true,
+          name: true,
+          merchantId: true,
+          merchant: {
+            id: true,
+            name: true,
+          },
+        },
+      },
       order: { createdAt: 'DESC' },
     });
+
+    // 返回时将 shop.name 和 shop.merchant.name 展平
+    return stores.map(store => ({
+      id: store.id,
+      shopId: store.shopId,
+      name: store.name,
+      address: store.address,
+      phone: store.phone,
+      remark: store.remark,
+      createdAt: store.createdAt,
+      updatedAt: store.updatedAt,
+      shopName: store.shop.name,
+      merchantName: store.shop.merchant.name,
+    }));
   }
 
   async findOne(id: number) {

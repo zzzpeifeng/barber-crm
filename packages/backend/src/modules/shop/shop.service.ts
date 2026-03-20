@@ -17,11 +17,34 @@ export class ShopService {
 
   async findAll(merchantId?: number) {
     const where = merchantId ? { merchantId } : {};
-    return this.shopRepo.find({
+    const shops = await this.shopRepo.find({
       where,
-      relations: ['stores', 'merchant'],
+      relations: ['merchant'],
+      select: {
+        id: true,
+        merchantId: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        merchant: {
+          id: true,
+          name: true,
+        },
+      },
       order: { createdAt: 'DESC' },
     });
+
+    // 返回时将 merchant.name 展平
+    return shops.map(shop => ({
+      id: shop.id,
+      merchantId: shop.merchantId,
+      name: shop.name,
+      description: shop.description,
+      createdAt: shop.createdAt,
+      updatedAt: shop.updatedAt,
+      merchantName: shop.merchant.name,
+    }));
   }
 
   async findOne(id: number) {

@@ -66,8 +66,8 @@
       >
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="name" label="门店名称" min-width="120" />
-        <el-table-column prop="shop.name" label="所属店铺" min-width="120" />
-        <el-table-column prop="shop.merchant.name" label="所属商家" min-width="120" />
+        <el-table-column prop="shopName" label="所属店铺" min-width="120" />
+        <el-table-column prop="merchantName" label="所属商家" min-width="120" />
         <el-table-column prop="address" label="门店地址" min-width="180" />
         <el-table-column prop="phone" label="联系电话" min-width="120" />
         <el-table-column prop="createdAt" label="创建时间" min-width="180">
@@ -264,7 +264,7 @@ const resetSearch = () => {
 const editStore = (store: Store) => {
   resetForm()
   editingStore.value = store
-  selectedMerchantId.value = store.shop?.merchantId
+  selectedMerchantId.value = store.shopId
   Object.assign(storeForm, store)
   showCreateDialog.value = true
 }
