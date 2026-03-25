@@ -82,4 +82,12 @@ router.beforeEach((to, from, next) => {
 app.use(createPinia())
 app.use(router)
 
+/* ========== 移动端防缩放事件拦截（JS 兜底） ========== */
+const gestureEvents = ['gesturestart', 'gesturechange', 'gestureend'] as const
+gestureEvents.forEach(eventName => {
+  document.addEventListener(eventName, (e: Event) => {
+    e.preventDefault()
+  }, { passive: false })
+})
+
 app.mount('#app')

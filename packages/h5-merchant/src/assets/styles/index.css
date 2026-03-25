@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========== 移动端全局防护 ========== */
+html {
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  -ms-scroll-chaining: none;
+}
+
+body {
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* iOS Safari: 输入框 font-size >= 16px 防止聚焦时自动缩放页面 */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+/* ========== Vant 样式覆盖 ========== */
 :root {
   /* SHOPLINE POS 2.0 Style Variables - Light Theme */
   --van-primary-color: #2563eb; /* Tailwind blue-600 */
