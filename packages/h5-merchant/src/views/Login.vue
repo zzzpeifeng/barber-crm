@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import { authApi } from '@/api/auth'
@@ -146,6 +146,8 @@ const handleLogin = async () => {
     authStore.setAuth(response.user, response.access_token)
     saveCredentials()
     showToast('登录成功')
+    // 使用 nextTick 确保 localStorage 写入完成后再跳转
+    await nextTick()
     router.push('/shops')
   } catch (error: any) {
     showToast(error.message || '登录失败')
